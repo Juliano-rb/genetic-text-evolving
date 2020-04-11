@@ -1,16 +1,15 @@
 import Individual from "./Individual.js";
 
 class Genetic {
-    constructor(populationSize, chromoLength) {
+    constructor(initialPopulationSize) {
         this.population = [];
-        this.populationSize = populationSize;
-        this.chromoLength = chromoLength;
+        this.populationSize = initialPopulationSize;
     }
 
-    start() {
+    start(chromoLength) {
+        this.chromoLength = chromoLength;
         this.generatePopulation(this.populationSize);
     }
-
     /**
      * @param {numeric} populationSize
      */
@@ -22,6 +21,20 @@ class Genetic {
         }
 
         console.log("Done");
+    }
+
+    calculateFitness(individual) {
+        const goalChromo = document.getElementById("input-text").value;
+        const individualChromo = individual.chromosome;
+        const length = goalChromo.length;
+        let equalGenes = 0;
+
+        for (let i = 0; i < length; i++) {
+            if (goalChromo[i] === individualChromo[i]) {
+                equalGenes++;
+            }
+        }
+        return equalGenes / length;
     }
 
     generateNewIndividual(chromoLength) {
