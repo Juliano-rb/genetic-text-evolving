@@ -1,21 +1,18 @@
 import Individual from "./Individual.js";
 
 class Genetic {
-    constructor(initialPopulationSize) {
+    constructor(config) {
         this.population = [];
-        this.populationSize = initialPopulationSize;
-    }
-
-    start(chromoLength) {
-        this.chromoLength = chromoLength;
-        this.generatePopulation(this.populationSize);
+        this.scores = []; // shape: [ {index:0, score:0}, ... ]
+        this.populationSize = config.initPopSize;
+        this.chromoLength = config.chromoLength;
     }
     /**
      * @param {numeric} populationSize
      */
-    generatePopulation(populationSize) {
+    generatePopulation() {
         console.log("Generating initial population...");
-        while (this.population.length < populationSize) {
+        while (this.population.length < this.populationSize) {
             const newIndividual = this.generateNewIndividual(this.chromoLength);
             this.population.push(newIndividual);
         }
@@ -23,18 +20,29 @@ class Genetic {
         console.log("Done");
     }
 
-    calculateFitness(individual) {
-        const goalChromo = document.getElementById("input-text").value;
-        const individualChromo = individual.chromosome;
-        const length = goalChromo.length;
-        let equalGenes = 0;
+    calculateScores() {
+        console.group("Calculating population scores...");
 
-        for (let i = 0; i < length; i++) {
-            if (goalChromo[i] === individualChromo[i]) {
-                equalGenes++;
-            }
-        }
-        return equalGenes / length;
+        this.scores = [];
+        this.population.forEach((individual, index) => {
+            const score = this.calculateFitness(individual);
+            this.scores.push({ index: index, score: score });
+        });
+
+        console.groupEnd("Calculating population scores...");
+    }
+
+    calculateFitness(individual) {
+        const goalString = document.getElementById("input-text").value;
+
+        const goalIndividual = Individual.fromString(goalString);
+
+        const distance = goalIndividual.distanceTo(individual);
+
+        const score = distance;
+        console.log(`Score of individual - ${individualChromo}: ${score}`);
+
+        return score;
     }
 
     generateNewIndividual(chromoLength) {
