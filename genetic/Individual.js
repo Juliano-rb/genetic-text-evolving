@@ -23,7 +23,6 @@ class Individual {
         let chromosome = "";
 
         while (chromosome.length < length) {
-            console.log(chromosome);
             const gene = getNewRandomChar();
             chromosome = chromosome.concat(gene);
         }

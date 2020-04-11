@@ -1,6 +1,6 @@
 import Genetic from "./genetic/Genetic.js";
 import Individual from "./genetic/Individual.js";
 
-const genetic = new Genetic();
+const genetic = new Genetic(100, 30);
 
-console.log(genetic.generateNewIndividual(20));
+genetic.start();
