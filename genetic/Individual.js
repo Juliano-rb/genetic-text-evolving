@@ -7,6 +7,8 @@ class Individual {
         this.MAX_GEN_NUMBER = 127;
         this.MIN_GEN_NUMBER = 32;
 
+        this.MUTATION_RATE = 0.01;
+
         this.chromosome = this.generateChromosome(chromoLength);
     }
 
@@ -66,12 +68,20 @@ class Individual {
      * @param {Individual} individual
      */
     crossoverWith(individual) {
+        const mutation = () => Math.random() < this.MUTATION_RATE;
+        const doMutation = (i) => {
+            const mutationPos = Math.floor(Math.random() * i.length);
+            const mutateLevel = Math.floor(Math.random() * 5) - 2; // generate in range [-2,+2]
+
+            i[mutationPos] = +mutateLevel;
+        };
+
         const CROSSOVER_POINT = 0.5;
 
         const fatherChromo = this.chromosome;
         const motherChromo = individual.chromosome;
 
-        const son = [
+        const sonChromo = [
             ...fatherChromo.slice(0, fatherChromo.length * CROSSOVER_POINT),
             ...motherChromo.slice(
                 motherChromo.length * CROSSOVER_POINT,
@@ -79,13 +89,27 @@ class Individual {
             ),
         ];
 
-        const daughter = [
+        const daughterChromo = [
             ...motherChromo.slice(0, motherChromo.length * CROSSOVER_POINT),
             ...fatherChromo.slice(
                 fatherChromo.length * CROSSOVER_POINT,
                 fatherChromo.length
             ),
         ];
+
+        if (mutation()) {
+            console.warn("Mutation of son");
+            doMutation(sonChromo);
+        }
+        if (mutation()) {
+            console.warn("Mutation of daughter");
+            doMutation(daughterChromo);
+        }
+
+        const son = new Individual(sonChromo.length);
+        son.chromosome = sonChromo;
+        const daughter = new Individual(daughterChromo.length);
+        daughter.chromosome = daughterChromo;
 
         return [son, daughter];
     }
