@@ -6,10 +6,14 @@ class Genetic {
         this.scores = []; // shape: [ {index:0, score:0}, ... ]
         this.populationSize = config.initPopSize;
         this.chromoLength = config.chromoLength;
+        this.goalString = config.goalString;
     }
-    /**
-     * @param {numeric} populationSize
-     */
+    setUp(config) {
+        this.populationSize = config.initPopSize || this.populationSize;
+        this.chromoLength = config.chromoLength || this.chromoLength;
+        this.goalString = config.goalString || this.goalString;
+    }
+
     generatePopulation() {
         console.log("Generating initial population...");
         while (this.population.length < this.populationSize) {
@@ -33,14 +37,23 @@ class Genetic {
     }
 
     calculateFitness(individual) {
-        const goalString = document.getElementById("input-text").value;
+        const goalString = this.goalString;
 
         const goalIndividual = Individual.fromString(goalString);
 
-        const distance = goalIndividual.distanceTo(individual);
+        // amplitude é o intervalo def valores possivel para os genes do individuo (distancia maxima de um gene para outro)
+        const individualAmplitude =
+            goalIndividual.MAX_GEN_NUMBER - goalIndividual.MIN_GEN_NUMBER;
+        // distancia máxima para os individuos em questão é o comprimento do maior * amplitude do individuo
+        const MAX_DISTANCE =
+            goalIndividual.chromosome.length > individual.chromosome.length
+                ? goalIndividual.chromosome.length * individualAmplitude
+                : individual.chromosome.length * individualAmplitude;
 
-        const score = distance;
-        console.log(`Score of individual - ${individualChromo}: ${score}`);
+        const distance = goalIndividual.distanceTo(individual);
+        const score = 1 - distance / MAX_DISTANCE;
+
+        console.log(`Score of individual - ${individual.toString()}: ${score}`);
 
         return score;
     }

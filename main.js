@@ -1,9 +1,34 @@
 import Genetic from "./genetic/Genetic.js";
 
-const genetic = new Genetic(100, 30);
+import Individual from "./genetic/Individual.js";
 
-genetic.start();
+const ind1 = Individual.fromString("Juliano");
+const ind2 = Individual.fromString("Juliann");
 
-document.getElementById("input-text").value = "Meu nome é ";
+console.log(ind1.toString());
+console.log(ind2.toString());
 
-console.log(genetic.calculateFitness(individual));
+console.log("distance = " + ind2.distanceTo(ind1));
+
+document.getElementById("input-text").value = "Juliano";
+
+document.getElementById("btn-start").onclick = (e) => {
+    const initialPopulationSize = 100;
+    const goal = document.getElementById("input-text").value;
+    const chromosomeLength = goal.length;
+
+    const config = {
+        initPopSize: 100,
+        chromoLength: chromosomeLength,
+        goalString: document.getElementById("input-text").value,
+    };
+
+    const genetic = new Genetic(config);
+
+    genetic.generatePopulation();
+    //genetic.calculateScores();
+
+    console.log("Fitness" + genetic.calculateFitness(ind1));
+
+    console.log("endded");
+};
