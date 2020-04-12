@@ -7,11 +7,13 @@ class Genetic {
         this.populationSize = config.initPopSize;
         this.chromoLength = config.chromoLength;
         this.goalString = config.goalString;
+        this.selectionRate = config.selectionRate || 0.6;
     }
     setUp(config) {
         this.populationSize = config.initPopSize || this.populationSize;
         this.chromoLength = config.chromoLength || this.chromoLength;
         this.goalString = config.goalString || this.goalString;
+        this.selectionRate = config.selectionRate || 0.6;
     }
 
     generatePopulation() {
@@ -56,6 +58,29 @@ class Genetic {
         console.log(`Score of individual - ${individual.toString()}: ${score}`);
 
         return score;
+    }
+
+    selection() {
+        console.group("Starting selection...");
+        console.log(this.scores, this.population);
+
+        this.scores.sort((a, b) => (a.score > b.score ? -1 : 1));
+        this.scores = this.scores.slice(
+            0,
+            this.scores.length * this.selectionRate
+        );
+
+        const newPopulation = [];
+
+        this.scores.forEach((item, index) => {
+            newPopulation.push(this.population[item.index]);
+        });
+
+        this.population = newPopulation;
+
+        this.scores = [];
+        console.log(this.population);
+        console.groupEnd("Starting selection...");
     }
 
     generateNewIndividual(chromoLength) {
