@@ -61,6 +61,34 @@ class Individual {
 
         return GlobalDiff;
     }
+    /**
+     *
+     * @param {Individual} individual
+     */
+    crossoverWith(individual) {
+        const CROSSOVER_POINT = 0.5;
+
+        const fatherChromo = this.chromosome;
+        const motherChromo = individual.chromosome;
+
+        const son = [
+            ...fatherChromo.slice(0, fatherChromo.length * CROSSOVER_POINT),
+            ...motherChromo.slice(
+                motherChromo.length * CROSSOVER_POINT,
+                motherChromo.length
+            ),
+        ];
+
+        const daughter = [
+            ...motherChromo.slice(0, motherChromo.length * CROSSOVER_POINT),
+            ...fatherChromo.slice(
+                fatherChromo.length * CROSSOVER_POINT,
+                fatherChromo.length
+            ),
+        ];
+
+        return [son, daughter];
+    }
 }
 
 export default Individual;
