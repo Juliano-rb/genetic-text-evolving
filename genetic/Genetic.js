@@ -83,6 +83,27 @@ class Genetic {
         console.groupEnd("Starting selection...");
     }
 
+    crossoverPopulation() {
+        console.group("Starting crossover...");
+        const childrens = [];
+        const remainingIndividuals = [...this.population];
+
+        /**
+         * Não repete individuos
+         */
+        while (remainingIndividuals.length > 0) {
+            const father = remainingIndividuals.shift();
+
+            remainingIndividuals.forEach((mother, i) => {
+                childrens.push(...father.crossoverWith(mother));
+            });
+        }
+
+        const newPopulation = [...this.population, ...childrens];
+        this.population = newPopulation;
+        console.groupEnd("Starting crossover...");
+    }
+
     generateNewIndividual(chromoLength) {
         return new Individual(chromoLength);
     }
