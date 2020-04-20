@@ -55,19 +55,18 @@ class Genetic {
         const distance = goalIndividual.distanceTo(individual);
         const score = 1 - distance / MAX_DISTANCE;
 
-        console.log(`Score of individual - ${individual.toString()}: ${score}`);
+        //console.log(`Score of individual - ${individual.toString()}: ${score}`);
 
         return score;
     }
 
     selection() {
         console.group("Starting selection...");
-        console.log(this.scores, this.population);
 
         this.scores.sort((a, b) => (a.score > b.score ? -1 : 1));
         this.scores = this.scores.slice(
             0,
-            this.scores.length * this.selectionRate
+            this.populationSize * this.selectionRate
         );
 
         const newPopulation = [];
@@ -77,13 +76,12 @@ class Genetic {
         });
 
         this.population = newPopulation;
-
         this.scores = [];
-        console.log(this.population);
+
         console.groupEnd("Starting selection...");
     }
 
-    crossoverPopulation() {
+    crossover() {
         console.group("Starting crossover...");
         const childrens = [];
         const remainingIndividuals = [...this.population];
