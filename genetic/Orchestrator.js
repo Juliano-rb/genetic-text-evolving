@@ -16,16 +16,16 @@ class Orchestrator {
             function (el) {
                 console.log(el);
             };
-    }
 
+        this.genetic = geneticModel;
         this.genetic.log = this.log - 1;
+        this.generations = config.generations || 100;
     }
 
     start() {
         this.genetic.generatePopulation();
         this.genetic.calculateScores();
 
-        const generations = 200;
         let generationCount = 0;
 
         const generation = () => {
@@ -34,7 +34,7 @@ class Orchestrator {
             this.newGeneration();
 
             generationCount += 1;
-            if (generationCount < generations) {
+            if (generationCount < this.generations) {
                 if (
                     this.updateMethod ===
                     Orchestrator.UPDATE_METHOD.eachGeneration
