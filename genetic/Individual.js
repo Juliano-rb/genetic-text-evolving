@@ -3,13 +3,12 @@ class Individual {
      *
      * @param {number} chromoLength
      */
-    constructor(chromoLength) {
-        this.MAX_GEN_NUMBER = 127;
+    constructor(config) {
         this.MIN_GEN_NUMBER = 32;
+        this.MAX_GEN_NUMBER = 164;
+        this.MUTATION_RATE = config.mutationRate || 0.1;
 
-        this.MUTATION_RATE = 0.1;
-
-        this.chromosome = this.generateChromosome(chromoLength);
+        this.chromosome = this.generateChromosome(config.chromoLength);
     }
 
     static fromString(str) {

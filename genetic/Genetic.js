@@ -55,8 +55,6 @@ class Genetic {
         const distance = goalIndividual.distanceTo(individual);
         const score = 1 - distance / MAX_DISTANCE;
 
-        //console.log(`Score of individual - ${individual.toString()}: ${score}`);
-
         return score;
     }
 
@@ -103,7 +101,7 @@ class Genetic {
     }
 
     generateNewIndividual(chromoLength) {
-        return new Individual(chromoLength);
+        return new Individual({ chromoLength: chromoLength });
     }
 }
 
