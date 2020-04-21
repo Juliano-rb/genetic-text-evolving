@@ -11,7 +11,11 @@ class Individual {
         this.chromosome = this.generateChromosome(config.chromoLength);
         this.log = config.log || 0;
     }
-
+    /**
+     * Creates a new Individual from a string with cromossome info
+     * @param {String} str
+     * @returns {Individual} New Individual
+     */
     static fromString(str) {
         const chromossome = str.split("").map((c) => c.charCodeAt());
         const individual = new Individual(str.length);
@@ -19,11 +23,17 @@ class Individual {
 
         return individual;
     }
-
+    /**
+     * overrides the the default toString() method
+     */
     toString() {
         return String.fromCharCode(...this.chromosome);
     }
-
+    /**
+     * Generates a valid chromosome string sequence
+     * @param {Number} length
+     * @returns {String} Chromosome
+     */
     generateChromosome(length) {
         const getNewRandomCharCode = () => {
             const max = this.MAX_GEN_NUMBER;
@@ -42,7 +52,10 @@ class Individual {
 
         return chromosome;
     }
-
+    /**
+     * Calculates the distance between this individual and the individual passed in parameter
+     * @param {Individual} individual
+     */
     distanceTo(individual) {
         const length =
             this.chromosome.length > individual.chromosome.length
@@ -64,11 +77,13 @@ class Individual {
         return GlobalDiff;
     }
     /**
-     *
+     * Crosses this individual with the individual passed in parameter
      * @param {Individual} individual
      */
     crossoverWith(individual) {
+        /**Randomly defines if a mutation will occur */
         const mutation = () => Math.random() < this.MUTATION_RATE;
+        /**Do the mutation, randomly defines the mutated gene and the level of mutation*/
         const doMutation = (i) => {
             this.printLog("Mutation in chromosome: " + i.toString());
             const mutationPos = Math.floor(Math.random() * i.length);
