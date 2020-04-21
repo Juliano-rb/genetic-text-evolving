@@ -1,10 +1,23 @@
 class Orchestrator {
+    static UPDATE_METHOD = {
+        eachGeneration: "eachGeneration",
+        inTheEnd: "inTheEnd",
+    };
+
     /**
-     *
      * @param {Genetic} geneticModel Implementation of a genetic following the standard
      */
-    constructor(geneticModel) {
+    constructor(geneticModel, config = {}) {
+        //ouputFunction
         this.geneticModel = geneticModel;
+
+        this.updateMethod =
+            config.updateMethod || Orchestrator.UPDATE_METHOD.inTheEnd;
+        this.outputFunction =
+            config.outputFunction ||
+            function (el) {
+                console.log(el);
+            };
     }
 
     initializeModel(config) {
@@ -17,22 +30,33 @@ class Orchestrator {
 
         const generations = 200;
         let generationCount = 0;
-        while (generationCount < generations) {
-            document.getElementById(
-                "output-text"
-            ).value = this.genetic.population[0].toString();
 
-            console.log("Generation " + generationCount);
+        const generation = () => {
+            this.outputFunction(this.genetic.population[0].toString());
+
+            //console.log("Generation " + generationCount);
+
             this.newGeneration();
 
             generationCount += 1;
-        }
+            if (generationCount < generations) {
+                if (
+                    this.updateMethod ===
+                    Orchestrator.UPDATE_METHOD.eachGeneration
+                ) {
+                    setTimeout(() => {
+                        generation();
+                    }, 100);
+                } else {
+                    generation();
+                }
+            }
+        };
 
-        this.genetic.selection();
+        generation();
     }
 
     newGeneration() {
-        // rever a seleção para filtrar uma quantidade fixa
         this.genetic.selection();
         this.genetic.crossover();
         this.genetic.calculateScores();
