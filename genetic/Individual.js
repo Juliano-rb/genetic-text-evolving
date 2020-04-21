@@ -9,6 +9,7 @@ class Individual {
         this.MUTATION_RATE = config.mutationRate || 0.1;
 
         this.chromosome = this.generateChromosome(config.chromoLength);
+        this.score = null;
         this.log = config.log || 0;
     }
     /**
