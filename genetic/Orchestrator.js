@@ -41,6 +41,9 @@ class Orchestrator {
                 ) {
                     setTimeout(() => {
                         generation();
+                        this.outputFunction(
+                            this.genetic.population[0].toString()
+                        );
                     }, 100);
                 } else {
                     generation();
@@ -49,6 +52,10 @@ class Orchestrator {
         };
 
         generation();
+
+        if (this.updateMethod === Orchestrator.UPDATE_METHOD.inTheEnd) {
+            this.outputFunction(this.genetic.population[0].toString());
+        }
     }
 
     newGeneration() {
