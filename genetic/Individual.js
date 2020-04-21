@@ -7,7 +7,7 @@ class Individual {
         this.MAX_GEN_NUMBER = 127;
         this.MIN_GEN_NUMBER = 32;
 
-        this.MUTATION_RATE = 0.01;
+        this.MUTATION_RATE = 0.1;
 
         this.chromosome = this.generateChromosome(chromoLength);
     }
@@ -73,7 +73,7 @@ class Individual {
             const mutationPos = Math.floor(Math.random() * i.length);
             const mutateLevel = Math.floor(Math.random() * 5) - 2; // generate in range [-2,+2]
 
-            i[mutationPos] = +mutateLevel;
+            i[mutationPos] += mutateLevel;
         };
 
         const CROSSOVER_POINT = 0.5;
@@ -98,11 +98,11 @@ class Individual {
         ];
 
         if (mutation()) {
-            console.warn("Mutation of son");
+            //console.warn("Mutation");
             doMutation(sonChromo);
         }
         if (mutation()) {
-            console.warn("Mutation of daughter");
+            //console.warn("Mutation");
             doMutation(daughterChromo);
         }
 
