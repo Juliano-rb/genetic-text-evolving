@@ -1,11 +1,9 @@
 import Genetic from "./genetic/Genetic.js";
-
-import Individual from "./genetic/Individual.js";
+import Orchestrator from "./genetic/Orchestrator.js";
 
 document.getElementById("input-text").value = "Juliano";
 
-document.getElementById("btn-start").onclick = (e) => {
-    const initialPopulationSize = 10;
+const initialPopulationSize = 200;
     const goal = document.getElementById("input-text").value;
     const chromosomeLength = goal.length;
 
@@ -15,11 +13,11 @@ document.getElementById("btn-start").onclick = (e) => {
         goalString: goal,
     };
 
-    const genetic = new Genetic(config);
+const orch = new Orchestrator(Genetic);
+orch.initializeModel(config);
 
-    genetic.generatePopulation();
-    genetic.calculateScores();
-    genetic.selection();
+globalGenetic = orch.genetic;
 
-    console.log("endded");
+document.getElementById("btn-start").onclick = (e) => {
+    orch.start();
 };
