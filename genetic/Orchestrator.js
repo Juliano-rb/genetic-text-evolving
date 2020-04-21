@@ -4,11 +4,19 @@ class Orchestrator {
         inTheEnd: "inTheEnd",
     };
 
+    static STOP_CRITERIA = {
+        convergence: (context) => {
+            return context.bestIndividual
+                ? context.bestIndividual.score >= 1
+                : false;
+        },
+        none: () => false,
+    };
+
     /**
      * @param {Genetic} geneticModel Implementation of a genetic following the standard
      */
     constructor(geneticModel, config = {}) {
-        this.log = config.log || 0;
         this.updateMethod =
             config.updateMethod || Orchestrator.UPDATE_METHOD.inTheEnd;
         this.outputFunction =
@@ -16,10 +24,15 @@ class Orchestrator {
             function (el) {
                 console.log(el);
             };
+        this.stopCriteria =
+            config.stopCriteria || Orchestrator.STOP_CRITERIA.none;
+
+        this.log = config.log || 0;
+        this.maxGenerations = config.maxGenerations || 100;
+        this.bestIndividual = null;
 
         this.genetic = geneticModel;
         this.genetic.log = this.log - 1;
-        this.generations = config.generations || 100;
     }
 
     start() {
@@ -34,7 +47,9 @@ class Orchestrator {
             this.newGeneration();
 
             generationCount += 1;
-            if (generationCount < this.generations) {
+            let criteria = this.stopCriteria(this);
+            let gen = generationCount < this.maxGenerations;
+            if (!criteria || !gen) {
                 if (
                     this.updateMethod ===
                     Orchestrator.UPDATE_METHOD.eachGeneration
@@ -62,6 +77,8 @@ class Orchestrator {
         this.genetic.selection();
         this.genetic.crossover();
         this.genetic.calculateScores();
+
+        this.bestIndividual = this.genetic.population[0];
     }
 
     printLog(message) {
