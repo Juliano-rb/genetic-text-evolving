@@ -1,27 +1,29 @@
 import Genetic from "./genetic/Genetic.js";
 import Orchestrator from "./genetic/Orchestrator.js";
 
-document.getElementById("input-text").value = "Juliano";
+document.getElementById("input-text").value = "Love is War";
 
 document.getElementById("btn-start").onclick = (e) => {
-    const initialPopulationSize = 200;
     const goal = document.getElementById("input-text").value;
     const chromosomeLength = goal.length;
 
     const config = {
-        initPopSize: initialPopulationSize,
+        initPopSize: 200,
         chromoLength: chromosomeLength,
         goalString: goal,
     };
 
-    const orch = new Orchestrator(Genetic, {
+    const genetic = new Genetic(config);
+
+    const orch = new Orchestrator(genetic, {
+        maxGenerations: 400,
+        stopCriteria: Orchestrator.STOP_CRITERIA.convergence,
         updateMethod: Orchestrator.UPDATE_METHOD.eachGeneration,
         outputFunction: function (el) {
             document.getElementById("output-text").value = el;
         },
         log: 2,
     });
-    orch.initializeModel(config);
 
     globalGenetic = orch.genetic;
     orch.start();
@@ -29,5 +31,5 @@ document.getElementById("btn-start").onclick = (e) => {
 
 /**
  * todo salvar scores nos individuos ou criar uma forma facil de saber os scores
- * analisar se a mutação esta funcionando, pois esta estagnando
+ * ver melhor a versão de update html (lenta) e a questão do update a cada geração
  */
