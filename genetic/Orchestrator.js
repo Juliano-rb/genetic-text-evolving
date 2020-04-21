@@ -47,9 +47,13 @@ class Orchestrator {
             this.newGeneration();
 
             generationCount += 1;
-            let criteria = this.stopCriteria(this);
-            let gen = generationCount < this.maxGenerations;
-            if (!criteria || !gen) {
+
+            const generationStop = () =>
+                this.maxGenerations
+                    ? generationCount < this.maxGenerations
+                    : true;
+
+            if (!this.stopCriteria(this) && generationStop()) {
                 if (
                     this.updateMethod ===
                     Orchestrator.UPDATE_METHOD.eachGeneration
@@ -59,7 +63,7 @@ class Orchestrator {
                         this.outputFunction(
                             this.genetic.population[0].toString()
                         );
-                    }, 100);
+                    }, 50);
                 } else {
                     generation();
                 }
