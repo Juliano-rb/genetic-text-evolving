@@ -19,6 +19,7 @@ document.getElementById("btn-start").onclick = (e) => {
         outputFunction: function (el) {
             document.getElementById("output-text").value = el;
         },
+        log: 2,
     });
     orch.initializeModel(config);
 

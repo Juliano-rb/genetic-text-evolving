@@ -8,9 +8,7 @@ class Orchestrator {
      * @param {Genetic} geneticModel Implementation of a genetic following the standard
      */
     constructor(geneticModel, config = {}) {
-        //ouputFunction
-        this.geneticModel = geneticModel;
-
+        this.log = config.log || 0;
         this.updateMethod =
             config.updateMethod || Orchestrator.UPDATE_METHOD.inTheEnd;
         this.outputFunction =
@@ -20,8 +18,7 @@ class Orchestrator {
             };
     }
 
-    initializeModel(config) {
-        this.genetic = new this.geneticModel(config);
+        this.genetic.log = this.log - 1;
     }
 
     start() {
@@ -32,9 +29,7 @@ class Orchestrator {
         let generationCount = 0;
 
         const generation = () => {
-            this.outputFunction(this.genetic.population[0].toString());
-
-            //console.log("Generation " + generationCount);
+            this.printLog("Generation " + generationCount);
 
             this.newGeneration();
 
@@ -60,6 +55,12 @@ class Orchestrator {
         this.genetic.selection();
         this.genetic.crossover();
         this.genetic.calculateScores();
+    }
+
+    printLog(message) {
+        if (this.log > 0) {
+            console.log(message);
+        }
     }
 }
 

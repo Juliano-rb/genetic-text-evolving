@@ -9,6 +9,7 @@ class Individual {
         this.MUTATION_RATE = config.mutationRate || 0.1;
 
         this.chromosome = this.generateChromosome(config.chromoLength);
+        this.log = config.log || 0;
     }
 
     static fromString(str) {
@@ -69,6 +70,7 @@ class Individual {
     crossoverWith(individual) {
         const mutation = () => Math.random() < this.MUTATION_RATE;
         const doMutation = (i) => {
+            this.printLog("Mutation in chromosome: " + i.toString());
             const mutationPos = Math.floor(Math.random() * i.length);
             const mutateLevel = Math.floor(Math.random() * 5) - 2; // generate in range [-2,+2]
 
@@ -97,20 +99,30 @@ class Individual {
         ];
 
         if (mutation()) {
-            //console.warn("Mutation");
             doMutation(sonChromo);
         }
         if (mutation()) {
-            //console.warn("Mutation");
             doMutation(daughterChromo);
         }
 
-        const son = new Individual(sonChromo.length);
+        const son = new Individual({
+            chromoLength: sonChromo.length,
+            log: this.log,
+        });
         son.chromosome = sonChromo;
-        const daughter = new Individual(daughterChromo.length);
+        const daughter = new Individual({
+            chromoLength: daughterChromo.length,
+            log: this.log,
+        });
         daughter.chromosome = daughterChromo;
 
         return [son, daughter];
+    }
+
+    printLog(message) {
+        if (this.log > 0) {
+            console.log(message);
+        }
     }
 }
 

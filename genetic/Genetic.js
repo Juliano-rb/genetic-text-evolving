@@ -8,6 +8,7 @@ class Genetic {
         this.chromoLength = config.chromoLength;
         this.goalString = config.goalString;
         this.selectionRate = config.selectionRate || 0.6;
+        this.log = config.log || 0;
     }
     setUp(config) {
         this.populationSize = config.initPopSize || this.populationSize;
@@ -17,17 +18,20 @@ class Genetic {
     }
 
     generatePopulation() {
-        console.log("Generating initial population...");
+        this.printLog("Generating initial population...");
         while (this.population.length < this.populationSize) {
-            const newIndividual = this.generateNewIndividual(this.chromoLength);
+            const newIndividual = this.generateNewIndividual(
+                this.chromoLength,
+                this.log - 1
+            );
             this.population.push(newIndividual);
         }
 
-        console.log("Done");
+        this.printLog("Done");
     }
 
     calculateScores() {
-        console.group("Calculating population scores...");
+        this.printLog("Calculating population scores...");
 
         this.scores = [];
         this.population.forEach((individual, index) => {
@@ -35,7 +39,7 @@ class Genetic {
             this.scores.push({ index: index, score: score });
         });
 
-        console.groupEnd("Calculating population scores...");
+        this.printLog("Done");
     }
 
     calculateFitness(individual) {
@@ -59,7 +63,7 @@ class Genetic {
     }
 
     selection() {
-        console.group("Starting selection...");
+        this.printLog("Starting selection...");
 
         this.scores.sort((a, b) => (a.score > b.score ? -1 : 1));
         this.scores = this.scores.slice(
@@ -76,11 +80,11 @@ class Genetic {
         this.population = newPopulation;
         this.scores = [];
 
-        console.groupEnd("Starting selection...");
+        this.printLog("Done");
     }
 
     crossover() {
-        console.group("Starting crossover...");
+        this.printLog("Starting crossover...");
         const childrens = [];
         const remainingIndividuals = [...this.population];
 
@@ -97,11 +101,20 @@ class Genetic {
 
         const newPopulation = [...this.population, ...childrens];
         this.population = newPopulation;
-        console.groupEnd("Starting crossover...");
+        this.printLog("Done");
     }
 
-    generateNewIndividual(chromoLength) {
-        return new Individual({ chromoLength: chromoLength });
+    generateNewIndividual(chromoLength, logLevel = 0) {
+        return new Individual({
+            chromoLength: chromoLength,
+            log: this.log - 1,
+        });
+    }
+
+    printLog(message) {
+        if (this.log > 0) {
+            console.log(message);
+        }
     }
 }
 
