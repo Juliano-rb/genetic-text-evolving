@@ -1,7 +1,7 @@
 import Genetic from "./genetic/Genetic.js";
 import Orchestrator from "./genetic/Orchestrator.js";
 
-document.getElementById("input-text").value = "Love is War";
+document.getElementById("input-text").value = "Some random text";
 
 document.getElementById("btn-start").onclick = (e) => {
     const goal = document.getElementById("input-text").value;
@@ -30,6 +30,5 @@ document.getElementById("btn-start").onclick = (e) => {
 };
 
 /**
- * todo salvar scores nos individuos ou criar uma forma facil de saber os scores
  * ver melhor a versão de update html (lenta) e a questão do update a cada geração
  */

@@ -22,7 +22,7 @@ class Orchestrator {
         this.outputFunction =
             config.outputFunction ||
             function (el) {
-                console.log(el);
+                console.log(`Best individual: ${el}`);
             };
         this.stopCriteria =
             config.stopCriteria || Orchestrator.STOP_CRITERIA.none;
