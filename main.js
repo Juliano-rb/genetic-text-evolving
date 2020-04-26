@@ -1,8 +1,6 @@
 import Genetic from "./genetic/Genetic.js";
 import Orchestrator from "./genetic/Orchestrator.js";
 
-document.getElementById("input-text").value = "Some random text";
-
 document.getElementById("btn-start").onclick = (e) => {
     const goal = document.getElementById("input-text").value;
     const chromosomeLength = goal.length;
